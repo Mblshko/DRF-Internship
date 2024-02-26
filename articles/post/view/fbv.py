@@ -24,7 +24,7 @@ def list_and_create_index(request):
 def update_and_delete_detail(request, pk):
     instance = get_object_or_404(Article, pk=pk)
     if request.method == "PUT":
-        serializer_class = PostSerializer(instance, data=request.data)
+        serializer_class = PostSerializer(instance, data=request.data, partial=True)
         if serializer_class.is_valid():
             serializer_class.save()
             return Response(serializer_class.data, status=status.HTTP_202_ACCEPTED)
@@ -61,7 +61,7 @@ def detail(request, pk):
 @api_view(["PUT"])
 def update(request, pk):
     instance = get_object_or_404(Article, pk=pk)
-    serializer_class = PostSerializer(instance, data=request.data)
+    serializer_class = PostSerializer(instance, data=request.data, partial=True)
     if serializer_class.is_valid():
         serializer_class.save()
         return Response(serializer_class.data, status=status.HTTP_202_ACCEPTED)
