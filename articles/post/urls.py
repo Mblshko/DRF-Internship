@@ -16,29 +16,23 @@ from articles.post.view.view_set import ArticleViewSet
 # ]
 
 '''На основе generic'''
-urlpatterns = [
-    path("", ListArticleAPIView.as_view(), name="index"),
-    path("<int:pk>/", DetailArticleAPIView.as_view(), name="detail"),
-    path("create/", CreateArticleAPIView.as_view(), name="create"),
-    path("update/<int:pk>/", UpdateArticleAPIView.as_view(), name="update"),
-    path("delete/<int:pk>/", DeleteArticleAPIView.as_view(), name="delete"),
-    path("comment/<int:pk>/", CreateCommentAPIView.as_view(), name="create_comment")
-]
+# urlpatterns = [
+#     path("", ListArticleAPIView.as_view(), name="index"),
+#     path("<int:pk>/", DetailArticleAPIView.as_view(), name="detail"),
+#     path("create/", CreateArticleAPIView.as_view(), name="create"),
+#     path("update/<int:pk>/", UpdateArticleAPIView.as_view(), name="update"),
+#     path("delete/<int:pk>/", DeleteArticleAPIView.as_view(), name="delete"),
+#     path("comment/<int:pk>/", CreateCommentAPIView.as_view(), name="create_comment")
+# ]
 
 '''На основе ViewSet'''
-# router = routers.DefaultRouter()
-# router.register(r'', ArticleViewSet)
+router = routers.DefaultRouter()
+router.register(r'', ArticleViewSet)
 
-# urlpatterns = [
-#     path('', include(router.urls)),
-# ]
-
-'''CRUD в 2 функции'''
-# urlpatterns = [
-#     path("", list_and_create_index, name="index"),
-#     path("<int:pk>/", update_and_delete_detail, name="detail"),
-#     path("comment/<int:pk>/", create_comment, name="create_comment")
-# ]
+urlpatterns = [
+    path('', include(router.urls)),
+    path("comment/<int:pk>/", CreateCommentAPIView.as_view(), name="create_comment"),
+]
 
 '''Для каждой ручки своя функция'''
 # urlpatterns = [

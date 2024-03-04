@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from articles.post.models import Article, Comment
+from articles.post.models import Article
 from articles.post.serializers import PostListSerializer, PostCreateSerializer, PostDetailSerializer, \
     CommentCreateSerializer
 
@@ -13,7 +13,7 @@ class ArticleListCreateView(APIView):
     model = Article
 
     def get(self, request):
-        queryset = Article.objects.filter(is_published=True)
+        queryset = Article.objects.filter(is_published=True).order_by("-created_at")
         ordering = request.query_params.get("ordering", None)
         if ordering:
             if ordering == 'up':

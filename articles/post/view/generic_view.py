@@ -7,26 +7,26 @@ from articles.post.serializers import PostListSerializer, PostDetailSerializer, 
 
 
 class ListArticleAPIView(generics.ListAPIView):
-    queryset = Article.objects.filter(is_published=True)
+    queryset = Article.objects.filter(is_published=True).order_by("-created_at")
     serializer_class = PostListSerializer
 
 
 class DetailArticleAPIView(generics.RetrieveAPIView):
-    queryset = Article.objects.filter(is_published=True)
+    queryset = Article.objects.filter(is_published=True).order_by("-created_at")
     serializer_class = PostDetailSerializer
 
 
 class CreateArticleAPIView(generics.CreateAPIView):
+    queryset = Article.objects.filter(is_published=True).order_by("-created_at")
     serializer_class = PostCreateSerializer
-    queryset = Article.objects.filter(is_published=True)
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
 
 class UpdateArticleAPIView(generics.UpdateAPIView):
+    queryset = Article.objects.filter(is_published=True).order_by("-created_at")
     serializer_class = PostCreateSerializer
-    queryset = Article.objects.filter(is_published=True)
 
 
 class DeleteArticleAPIView(generics.DestroyAPIView):

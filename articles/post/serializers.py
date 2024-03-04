@@ -40,7 +40,3 @@ class PostCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = ["title", "content", "is_published"]
-
-
-class PostSerializer(serializers.ModelSerializer):
-    pass
