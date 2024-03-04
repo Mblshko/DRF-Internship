@@ -20,8 +20,9 @@ from django.urls import path, include
 from articles.post.utils import redirect_to_main
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),
+    path("admin/", admin.site.urls),
+    path("api-auth/", include("rest_framework.urls")),
     path("", redirect_to_main),
-    path('articles/', include("articles.post.urls")),
+    path("articles/", include("articles.post.urls")),
+    path("user/", include("articles.user.urls")),
 ]
