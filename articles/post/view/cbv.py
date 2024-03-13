@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.db.utils import IntegrityError, OperationalError
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -25,9 +26,12 @@ class ArticleListCreateView(APIView):
 
     def post(self, request):
         serializer_data = PostCreateSerializer(data=request.data)
-        if serializer_data.is_valid():
+        try:
             serializer_data.save(author=request.user)
             return Response(serializer_data.data, status=status.HTTP_201_CREATED)
+        except ValueError:
+            return Response({"message": "Пользователь не авторизован"}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ArticleDetailUpdateDeleteView(APIView):
@@ -49,8 +53,13 @@ class ArticleDetailUpdateDeleteView(APIView):
 
     def delete(self, request, uuid=None):
         instance = get_object_or_404(self.model, id=uuid)
-        instance.delete()
-        return Response({"message": "Успешно удалено"}, status=status.HTTP_200_OK)
+        try:
+            instance.delete()
+            return Response({"message": "Успешно удалено"}, status=status.HTTP_200_OK)
+        except IntegrityError as error:
+            return Response({"message": error}, status=status.HTTP_400_BAD_REQUEST)
+        except OperationalError as error_o:
+            return Response({"message": error_o}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CreateComment(APIView):
