@@ -19,6 +19,7 @@ class CommentCreateSerializer(serializers.ModelSerializer):
 
 
 class PostListSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField(read_only=True)
     author = serializers.StringRelatedField(many=False, read_only=True)
 
     class Meta:
@@ -27,6 +28,7 @@ class PostListSerializer(serializers.ModelSerializer):
 
 
 class PostDetailSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField(read_only=True)
     author = serializers.StringRelatedField(many=False, read_only=True)
     comment = CommentViewSerializer(many=True)
 
