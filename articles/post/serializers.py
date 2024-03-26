@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.authentication import TokenAuthentication
 
 from articles.post.models import Article, Comment
 
@@ -42,3 +43,13 @@ class PostCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = ["title", "content", "is_published"]
+
+
+class PostUpdateSerializer(serializers.Serializer):
+    id = serializers.UUIDField(read_only=True)
+
+    class Meta:
+        model = Article
+        fields = ["id", "title", "content", ""]
+        read_only_fields = [""]
+        write_only_fields = [""]

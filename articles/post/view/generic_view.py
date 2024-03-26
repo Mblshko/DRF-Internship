@@ -1,7 +1,8 @@
-from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import get_object_or_404
 from django.db.utils import IntegrityError, OperationalError
+
 from rest_framework import generics, status
+from rest_framework import filters
 from rest_framework.response import Response
 
 from articles.post.models import Article
@@ -10,23 +11,15 @@ from articles.post.serializers import PostListSerializer, PostDetailSerializer, 
 
 
 class ListArticleAPIView(generics.ListAPIView):
-    queryset = Article.objects.filter(is_published=True).order_by("-created_at")
+    queryset = Article.objects.all()
     serializer_class = PostListSerializer
-
-    def get(self, request, *args, **kwargs):
-        queryset = Article.objects.filter(is_published=True).order_by("-created_at")
-        ordering = request.query_params.get("ordering", None)
-        if ordering:
-            if ordering == "DESC":
-                queryset = queryset.order_by("-created_at")
-            elif ordering == "ASC":
-                queryset = queryset.order_by("created_at")
-        serializer = PostListSerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    filter_backends = [filters.OrderingFilter]
+    # filterset_fields = ('title', 'created_at')
+    ordering_fields = ['title', 'created_at']
 
 
 class DetailArticleAPIView(generics.RetrieveAPIView):
-    queryset = Article.objects.filter(is_published=True).order_by("-created_at")
+    queryset = Article.objects.all()
     serializer_class = PostDetailSerializer
 
     def get_object(self):
